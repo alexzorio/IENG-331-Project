@@ -1,0 +1,17 @@
+Make sure the olist.duckdb file is in the same folder as sql scripts, makes everything easier
+
+Make sure you delete the outermost quotation marks when entering commands into your terminal
+IF THE README file is not in your folder weird stuff happens and you have to do a pull so make sure it is in there
+
+git saving process
+"git add ." ~ stages the whole folder - all the scripts you been working on
+"git commit -m"Your Message"" Saves changes with a message to track changes for versions
+At this point you have saved everything locally now you need to upload it to github
+
+What I had to do to connect local folder to github repository ~ probably never have to do this again but I am not too sure yet:
+"git branch -M main"
+"git remote add origin https://github.com/alexzorio/IENG-331-Project"
+
+Then when you want to actually upload into the github
+"git push -u origin main"
+This saves it for the group and tracks all the commits you make with the comments
