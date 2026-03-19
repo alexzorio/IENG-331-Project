@@ -1,6 +1,6 @@
 -- Telling the script to use the olist file and making a shortcut to reference it *Requires the file to be in the same folder
 -- Remove comment once per running queries
--- ATTACH 'olist.duckdb' AS olist;
+ATTACH 'olist.duckdb' AS olist;
 
 -- Print all the table names in the main schema
 SELECT table_name
@@ -11,3 +11,11 @@ SELECT table_name
 SELECT table_name, column_name, data_type, is_nullable
     FROM information_schema.columns
     ORDER BY table_name, ordinal_position;
+
+-- Row counts for all tables, making a new table row_counts to store all the new information
+
+SELECT
+    'customers' AS table_name,
+    'row count' AS info,
+    COUNT(*) AS value
+FROM olist.customers;
