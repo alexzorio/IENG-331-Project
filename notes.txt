@@ -15,3 +15,5 @@ What I had to do to connect local folder to github repository ~ probably never h
 Then when you want to actually upload into the github
 "git push -u origin main"
 This saves it for the group and tracks all the commits you make with the comments
+
+duckdb has default max number of rows shown as 40. If you want to change it use ".maxrows xxx"
