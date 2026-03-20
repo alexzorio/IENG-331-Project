@@ -72,9 +72,20 @@ SELECT
     'row count',
     COUNT(*)
 FROM olist.sellers
-ORDER BY table_name;
+UNION ALL
 /*
-Finished all the row counts, now moving onto null rates for columns. Directions say key columns,
-I think the key columns when looking at null values are going to be customers, sellers, products, orders, and category translation.
-The other columns are descriptive elements of each order, very important but data that does not make other data or references invalid.
+Finished all the row counts, now moving onto null rates for key columns.
+I am considering key columns to be ones that link information between tables. Columns that appear in multiple tables
+That is why I am choosing cusomter_id, order_id, product_id, and seller_id
+These are also the keys which if they are null or orphaned is a problem
+These keys appear multiple times and I am going to document how many times they appear as null and in which table they were null
+The structure of the table is going to be table name, the table we are looking in, info, which key it is and if it is primary (PK) or
+foreign (FK) to the table we are looking in, and the number of nulls found in that column for value.
 */
+SELECT
+    'customers' AS table_name,
+    'Null PK: customer_id' AS metric,
+    SUM(CASE WHEN customer_id IS NULL THEN 1 ELSE 0 END)
+FROM olist.customers;
+
+SELECT * FROM olist.customers WHERE customer_id IS NULL;
