@@ -87,7 +87,7 @@ foreign (FK) to the table we are looking in, and the number of nulls found in th
 -- First checking primary keys. A primary key is found in its own table. ex. customer_id is a primary key when found in the customer table
 SELECT
     'customers' AS table_name,
-    'Null PK: customer_id' AS metric,
+    'Null PK: customer_id' AS info,
     SUM(CASE WHEN customer_id IS NULL THEN 1 ELSE 0 END)
 FROM olist.customers
 UNION ALL
@@ -112,7 +112,7 @@ UNION ALL
 -- Moving on to checking foreign keys being missing. Key if foreign when not in it's primary table. ex. customer_id in orders table
 SELECT
     'orders' AS table_name,
-    'Null FK: customer_id' AS metric,
+    'Null FK: customer_id' AS info,
     SUM(CASE WHEN customer_id IS NULL THEN 1 ELSE 0 END)
 FROM olist.orders
 UNION ALL
@@ -144,4 +144,20 @@ SELECT
     'order_reviews',
     'Null FK: order_id',
     SUM(CASE WHEN order_id IS NULL THEN 1 ELSE 0 END)
-FROM olist.order_reviews;
+FROM olist.order_reviews
+-- That is all the NULL checks for keys.
+UNION ALL
+/*
+Now that we know the null instances of the keys I want to check if there are instances of foreign keys not matching up with primary keys. (Orphaned keys)
+Logic for testing is as follows count the number of times the foreign key does not match any primary key for that key.
+*/
+
+SELECT
+    'orders' AS table_name,
+    'Mismatch: Invalid customer_id' AS info,
+    COUNT(*) AS value
+FROM olist.orders
+WHERE customer_id IS NOT NULL
+    AND customer_id NOT IN (
+        SELECT customer_id FROM olist.customers
+    )
