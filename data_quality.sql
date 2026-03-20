@@ -212,3 +212,19 @@ WHERE order_id IS NOT NULL
         SELECT order_id FROM olist.orders
     );
 -- Finish checking for orphaned keys
+
+/*
+Moving on to look at the date range for the database. Needs to be its own table because of data types. Choosing purchase date to represent time span of data
+becuase entries are dependant on something being purchased.
+*/
+SELECT
+    'orders' AS table_name,
+    'first order placed' AS info,
+    MIN(order_purchase_timestamp) AS date_info
+FROM olist.ORDERS
+UNION ALL
+SELECT
+    'orders' AS table_name,
+    'last order placed' AS info,
+    MAX(order_purchase_timestamp) AS date_info
+FROM olist.ORDERS;
