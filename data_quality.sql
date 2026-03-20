@@ -161,3 +161,54 @@ WHERE customer_id IS NOT NULL
     AND customer_id NOT IN (
         SELECT customer_id FROM olist.customers
     )
+UNION ALL
+SELECT
+    'order_items',
+    'Mismatch: Invalid order_id',
+    COUNT(*)
+FROM olist.order_items
+WHERE order_id IS NOT NULL
+    AND order_id NOT IN (
+            SELECT order_id FROM olist.orders
+    )
+UNION ALL
+SELECT
+    'order_items',
+    'Mismatch: Invalid product_id',
+    COUNT(*)
+FROM olist.order_items
+WHERE product_id IS NOT NULL
+    AND product_id NOT IN (
+        SELECT product_id FROM olist.products
+    )
+UNION ALL
+SELECT
+    'order_items',
+    'Mismatch: Invalid seller_id',
+    COUNT(*)
+FROM olist.order_items
+WHERE seller_id IS NOT NULL
+    AND seller_id NOT IN (
+        SELECT seller_id FROM olist.sellers
+    )
+UNION ALL
+SELECT
+    'order_payments',
+    'Mismatch: Invalid order_id',
+    COUNT(*)
+FROM olist.order_payments
+WHERE order_id IS NOT NULL
+    AND order_id NOT IN (
+        SELECT order_id FROM olist.orders
+    )
+UNION ALL
+SELECT
+    'order_reviews',
+    'Mismatch: Invalid order_id',
+    COUNT(*)
+FROM olist.order_reviews
+WHERE order_id IS NOT NULL
+    AND order_id NOT IN (
+        SELECT order_id FROM olist.orders
+    );
+-- Finish checking for orphaned keys
