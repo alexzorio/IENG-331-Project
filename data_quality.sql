@@ -73,6 +73,7 @@ SELECT
     COUNT(*)
 FROM olist.sellers
 UNION ALL
+
 /*
 Finished all the row counts, now moving onto null rates for key columns.
 I am considering key columns to be ones that link information between tables. Columns that appear in multiple tables
@@ -82,10 +83,65 @@ These keys appear multiple times and I am going to document how many times they 
 The structure of the table is going to be table name, the table we are looking in, info, which key it is and if it is primary (PK) or
 foreign (FK) to the table we are looking in, and the number of nulls found in that column for value.
 */
+
+-- First checking primary keys. A primary key is found in its own table. ex. customer_id is a primary key when found in the customer table
 SELECT
     'customers' AS table_name,
     'Null PK: customer_id' AS metric,
     SUM(CASE WHEN customer_id IS NULL THEN 1 ELSE 0 END)
-FROM olist.customers;
-
-SELECT * FROM olist.customers WHERE customer_id IS NULL;
+FROM olist.customers
+UNION ALL
+SELECT
+    'orders',
+    'Null PK: order_id',
+    SUM(CASE WHEN order_id IS NULL THEN 1 ELSE 0 END)
+FROM olist.orders
+UNION ALL
+SELECT
+    'products',
+    'Null PK: product_id',
+    SUM(CASE WHEN product_id IS NULL THEN 1 ELSE 0 END)
+FROM olist.products
+UNION ALL
+SELECT
+    'sellers',
+    'Null PK: seller_id',
+    SUM(CASE WHEN seller_id IS NULL THEN 1 ELSE 0 END)
+FROM olist.sellers
+UNION ALL
+-- Moving on to checking foreign keys being missing. Key if foreign when not in it's primary table. ex. customer_id in orders table
+SELECT
+    'orders' AS table_name,
+    'Null FK: customer_id' AS metric,
+    SUM(CASE WHEN customer_id IS NULL THEN 1 ELSE 0 END)
+FROM olist.orders
+UNION ALL
+SELECT
+    'order_items',
+    'Null FK: order_id',
+    SUM(CASE WHEN order_id IS NULL THEN 1 ELSE 0 END)
+FROM olist.order_items
+UNION ALL
+SELECT
+    'order_items',
+    'Null FK: product_id',
+    SUM(CASE WHEN product_id IS NULL THEN 1 ELSE 0 END)
+FROM olist.order_items
+UNION ALL
+SELECT
+    'order_items',
+    'Null FK: seller_id',
+    SUM(CASE WHEN seller_id IS NULL THEN 1 ELSE 0 END)
+FROM olist.order_items
+UNION ALL
+SELECT
+    'order_payments',
+    'Null FK: order_id',
+    SUM(CASE WHEN order_id IS NULL THEN 1 ELSE 0 END)
+FROM olist.order_payments
+UNION ALL
+SELECT
+    'order_reviews',
+    'Null FK: order_id',
+    SUM(CASE WHEN order_id IS NULL THEN 1 ELSE 0 END)
+FROM olist.order_reviews;
