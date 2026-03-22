@@ -77,7 +77,7 @@ UNION ALL
 /*
 Finished all the row counts, now moving onto null rates for key columns.
 I am considering key columns to be ones that link information between tables. Columns that appear in multiple tables
-That is why I am choosing cusomter_id, order_id, product_id, and seller_id
+That is why I am choosing customer_id, order_id, product_id, and seller_id
 These are also the keys which if they are null or orphaned is a problem
 These keys appear multiple times and I am going to document how many times they appear as null and in which table they were null
 The structure of the table is going to be table name, the table we are looking in, info, which key it is and if it is primary (PK) or
@@ -146,7 +146,9 @@ SELECT
     SUM(CASE WHEN order_id IS NULL THEN 1 ELSE 0 END)
 FROM olist.order_reviews
 -- That is all the NULL checks for keys.
+
 UNION ALL
+
 /*
 Now that we know the null instances of the keys I want to check if there are instances of foreign keys not matching up with primary keys. (Orphaned keys)
 Logic for testing is as follows count the number of times the foreign key does not match any primary key for that key.
@@ -210,13 +212,55 @@ FROM olist.order_reviews
 WHERE order_id IS NOT NULL
     AND order_id NOT IN (
         SELECT order_id FROM olist.orders
-    );
+    )
 -- Finish checking for orphaned keys
+
+UNION ALL
+
+/*
+Moving on to checking for duplicate entries. The place we need to check for duplicates is places where data is likely to be added frequently, all the order tables.
+This includes orders, order_items, order_payments, and order_reviews. The other tables likely are not updated often and are do not have harmful duplicates. What I
+mean is that if a row in the customers table is duplicated if will not impact anything, it does not matter if there is a duplicate row of descriptive customer information.
+Duplicate order information is harmful as two of the same order may end up getting place.
+Since we checked if there were any null instances of keys previously, which there are none, we can check for duplicate keys to check for duplicate entries.
+*/
+
+SELECT
+    'orders' AS table_name,
+    'Duplicate Rows' AS metric,
+    COUNT(*) - (SELECT COUNT(*) FROM (SELECT DISTINCT * FROM olist.orders)) AS value
+FROM olist.orders
+
+UNION ALL
+
+SELECT
+    'order_items',
+    'Duplicate Rows',
+    COUNT(*) - (SELECT COUNT(*) FROM (SELECT DISTINCT * FROM olist.order_items))
+FROM olist.order_items
+
+UNION ALL
+
+SELECT
+    'order_payments',
+    'Duplicate Rows',
+    COUNT(*) - (SELECT COUNT(*) FROM (SELECT DISTINCT * FROM olist.order_payments))
+FROM olist.order_payments
+
+UNION ALL
+
+SELECT
+    'order_reviews',
+    'Duplicate Rows',
+    COUNT(*) - (SELECT COUNT(*) FROM (SELECT DISTINCT * FROM olist.order_reviews))
+FROM olist.order_reviews;
+
 
 /*
 Moving on to look at the date range for the database. Needs to be its own table because of data types. Choosing purchase date to represent time span of data
-becuase entries are dependant on something being purchased.
+because entries are dependent on something being purchased.
 */
+
 SELECT
     'orders' AS table_name,
     'first order placed' AS info,
