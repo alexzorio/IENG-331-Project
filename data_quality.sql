@@ -218,6 +218,41 @@ WHERE order_id IS NOT NULL
 UNION ALL
 
 /*
+I noticed when printing out the orders table that were null instances of dates. Going to do a null count for delivery dates.
+*/
+
+SELECT
+    'orders' AS table_name,
+    'Null order_purchase_timestamp' AS info,
+    SUM(CASE WHEN order_purchase_timestamp IS NULL THEN 1 ELSE 0 END)
+FROM olist.orders
+UNION ALL
+SELECT
+    'orders' AS table_name,
+    'Null order_approved_at' AS info,
+    SUM(CASE WHEN order_approved_at IS NULL THEN 1 ELSE 0 END)
+FROM olist.orders
+UNION ALL
+SELECT
+    'orders' AS table_name,
+    'Null order_delivered_carrier_date' AS info,
+    SUM(CASE WHEN order_delivered_carrier_date IS NULL THEN 1 ELSE 0 END)
+FROM olist.orders
+UNION ALL
+SELECT
+    'orders' AS table_name,
+    'Null order_delivered_customer_date' AS info,
+    SUM(CASE WHEN order_delivered_customer_date IS NULL THEN 1 ELSE 0 END)
+FROM olist.orders
+UNION ALL
+SELECT
+    'orders' AS table_name,
+    'Null order_estimated_delivery_date' AS info,
+    SUM(CASE WHEN order_estimated_delivery_date IS NULL THEN 1 ELSE 0 END)
+FROM olist.orders
+UNION ALL
+
+/*
 Moving on to checking for duplicate entries. The place we need to check for duplicates is places where data is likely to be added frequently, all the order tables.
 This includes orders, order_items, order_payments, and order_reviews. The other tables likely are not updated often and are do not have harmful duplicates. What I
 mean is that if a row in the customers table is duplicated if will not impact anything, it does not matter if there is a duplicate row of descriptive customer information.
