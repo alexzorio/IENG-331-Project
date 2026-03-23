@@ -6,4 +6,4 @@ on spending. We also want to rank customers based on the number of orders they p
 -- Requires the olist.duckdb file to be in the same folder to run
 ATTACH 'olist.duckdb' AS olist;
 
-SELECT * FROM olist.orders;
+SELECT * FROM olist.customers;

@@ -288,7 +288,9 @@ SELECT
     'order_reviews',
     'Duplicate Rows',
     COUNT(*) - (SELECT COUNT(*) FROM (SELECT DISTINCT * FROM olist.order_reviews))
-FROM olist.order_reviews;
+FROM olist.order_reviews
+
+ORDER BY info DESC, table_name;
 
 
 /*
