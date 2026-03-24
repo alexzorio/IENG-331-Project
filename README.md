@@ -10,6 +10,6 @@ bestcustomers.sql ranks the customers in the database based on the amount they h
 
 bestsellers.sql ranks the sellers/suppliers based on the value of product they have supplied as well as the number of orders they have filled.
 
-ABC.sql is one of the suggested queries that classifies inventory into A/B/C tiers using the pareto principle.
+ABC.sql is one of the suggested queries that classifies inventory into A/B/C tiers using the pareto principle. We made sure to take into acount the percenteage of total revenue that was taken up by each product. The revenue of each product was added together then divided by the grand total to find the percentage. Once that was done the products that made up 80% of the revenue was given the A tier, the next 15% was the B tier and the rest were put into C
 
-DeliveryTime.sql
+DeliveryTime.sql was used in order to compare the actual vs estimated by the region. This was done by rounding the difference beteween the estimaed and acutal delivery time for each region. These times were addded together to find a final average difference between the two values. The percentage of late orders was also found for each region. Once all the necessary tables were joined together the date was sorted to show the most delayed (positive numebers) to most early(negative numbers) for the deliveries. There were not any positive values even though some of the routes had over 50% of the products delivered late, those that were late were not as late as those that were early so that is likely why the numbers are all negative.
