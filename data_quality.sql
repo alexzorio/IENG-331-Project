@@ -19,6 +19,7 @@ SELECT table_name, column_name, data_type, is_nullable
 Row counts for all tables, making a new table row_counts to store all the new information.
 Going through each table one by one and linking the counts together in a new table.
 */
+
 SELECT
     'category translation' AS table_name,
     'row count' AS info,
