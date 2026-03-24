@@ -4,19 +4,22 @@ on value. We also want to rank suppliers/sellers based on the number of orders t
 */
 
 SELECT
-    c.customer_unique_id,
-    SUM(op.payment_value) AS total_spent,
-    COUNT(DISTINCT o.order_id) AS total_orders,
-    DENSE_RANK() OVER (ORDER BY SUM(op.payment_value) DESC) AS customer_rank
-FROM customers c
-JOIN orders o
-    ON c.customer_id = o.customer_id
-JOIN order_payments op
-    ON o.order_id = op.order_id
--- We only want to count orders that weren't canceled
-WHERE o.order_status NOT IN ('canceled', 'unavailable')
+    s.seller_id,
+    SUM(oi.price) AS total_product_value,
+    COUNT(DISTINCT oi.order_id) AS total_orders_filled,
+    -- Rank #1: Based on total money made
+    DENSE_RANK() OVER (ORDER BY SUM(oi.price) DESC) AS rank_by_value,
+    -- Rank #2: Based on total number of orders shipped
+    DENSE_RANK() OVER (ORDER BY COUNT(DISTINCT oi.order_id) DESC) AS rank_by_volume
+FROM olist.sellers s
+JOIN olist.order_items oi
+    ON s.seller_id = oi.seller_id
+JOIN olist.orders o
+    ON oi.order_id = o.order_id
+-- We strictly want orders that were successfully filled and delivered
+WHERE o.order_status = 'delivered'
 GROUP BY
-    c.customer_unique_id
+    s.seller_id
 ORDER BY
-    customer_rank ASC
+    rank_by_value ASC
 LIMIT 100;
