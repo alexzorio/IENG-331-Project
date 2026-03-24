@@ -1,5 +1,5 @@
 /*
-This part will sort the data into ABC inventory clasification. This will be based on the parteo principle to seperarate
+This part will sort the data into ABC inventory classification. This will be based on the pareto principle to separate
 the products into tiers A,B, and C, with the top 20% of revenue getting an A
 the next 15 geting a B
 and the rest getting a C
@@ -16,7 +16,7 @@ WITH ProductRevenue AS (
     GROUP BY 1
 ),
 RunningTotals AS (
-    -- Find a cummulative revenue for each product
+    -- Find a cumulative revenue for each product
     SELECT
         product_id,
         total_revenue,
@@ -24,7 +24,7 @@ RunningTotals AS (
         SUM(total_revenue) OVER () as grand_total -- Grand total revenue for all products
     FROM ProductRevenue
 )
--- Use when else statement to seperate the different orders into their respective tiers by revenue percentage
+-- Use when else statement to separate the different orders into their respective tiers by revenue percentage
 SELECT
     product_id,
     total_revenue,
